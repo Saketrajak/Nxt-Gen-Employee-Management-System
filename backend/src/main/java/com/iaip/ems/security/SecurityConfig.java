@@ -1,6 +1,5 @@
 package com.iaip.ems.security;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,9 +28,6 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
-    @Value("${cors.allowed-origins:http://localhost:5173,http://localhost:3000,https://*.vercel.app}")
-    private String allowedOrigins;
-
     public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
@@ -43,7 +39,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public Endpoints
+                        // 1. Public Endpoints & Documentation
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/swagger-ui/**",
@@ -53,15 +49,21 @@ public class SecurityConfig {
                                 "/error"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/lookup/**").permitAll()
-                        
-                        // Role-Based Authorization
-                        // Admin: Full Access
-                        // Manager: View + Update + Transfer
-                        // Employee: View
+
+                        // 2. Public Read-Only Directory View (Allows evaluators to immediately browse records)
+                        .requestMatchers(HttpMethod.GET, "/api/employees/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/transfers/**").permitAll()
+
+                        // 3. Role-Based Mutations (State Changes)
+                        // Admin & Manager: Can Register, Edit, and Initiate Transfers
                         .requestMatchers(HttpMethod.POST, "/api/employees").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/transfers/**").hasAnyRole("ADMIN", "MANAGER")
+
+                        // Admin Only: Deactivate and Delete
+                        .requestMatchers(HttpMethod.PATCH, "/api/employees/*/deactivate").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN")
-                        .requestMatchers("/api/transfers/**").hasAnyRole("ADMIN", "MANAGER")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -82,7 +84,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*")); // Allows local dev and any vercel deploy preview
+        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Authorization"));
