@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IAIP 2026 - Technical Assessment Solution Report - Saket Rajak</title>
+<style>
+  @page {
+    size: A4;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.5;
+    font-size: 11pt;
+    margin: 0;
+    padding: 20px;
+    background: #ffffff;
+  }
+  .header-box {
+    border-bottom: 3px double #0f172a;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .header-title h1 {
+    font-size: 18pt;
+    margin: 0;
+    color: #0b132b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .header-title h2 {
+    font-size: 13pt;
+    margin: 4px 0 0 0;
+    color: #047857;
+    font-weight: 600;
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 9pt;
+    color: #475569;
+  }
+  .meta-tag {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: #0f172a;
+  }
+  h2.section-title {
+    font-size: 13pt;
+    color: #0f172a;
+    border-bottom: 1.5px solid #cbd5e1;
+    padding-bottom: 4px;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  h3.sub-title {
+    font-size: 11pt;
+    color: #1e293b;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  p, li {
+    font-size: 10pt;
+    color: #334155;
+  }
+  ul, ol {
+    margin-top: 4px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+  }
+  li {
+    margin-bottom: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px 0;
+    font-size: 9.5pt;
+  }
+  th {
+    background: #0f172a;
+    color: #ffffff;
+    text-align: left;
+    padding: 6px 10px;
+    font-weight: 600;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #1e293b;
+  }
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+  .code-badge {
+    font-family: Consolas, monospace;
+    background: #e2e8f0;
+    color: #0f172a;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 8.5pt;
+  }
+  .arch-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: Consolas, monospace;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    white-space: pre;
+    color: #0f172a;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .callout-box {
+    background: #ecfdf5;
+    border-left: 4px solid #059669;
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .callout-box p {
+    margin: 0;
+    color: #065f46;
+    font-size: 9.5pt;
+  }
+  .cert-box {
+    border: 2px dashed #94a3b8;
+    background: #fdfdfd;
+    padding: 18px;
+    border-radius: 6px;
+    margin: 16px 0;
+  }
+  .sig-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 10px;
+  }
+  .sig-item {
+    width: 45%;
+    border-top: 1px solid #475569;
+    text-align: center;
+    padding-top: 6px;
+    font-size: 9pt;
+    font-weight: 600;
+    color: #334155;
+  }
+  .page-break {
+    page-break-after: always;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header-box">
+  <div class="header-title">
+    <h1>Indian Army Internship Programme (IAIP) : 2026</h1>
+    <h2>HQ Southern Command — Technical Assessment Report</h2>
+  </div>
+  <div class="header-meta">
+    <div><strong>Domain:</strong> Process Automation & App Development</div>
+    <div><strong>Candidate:</strong> Saket Rajak</div>
+    <div><strong>GitHub:</strong> <span class="meta-tag">Saketrajak/Nxt-Gen-Employee-Management-System</span></div>
+    <div><strong>Assessment Score:</strong> Out of 100 Marks</div>
+  </div>
+</div>
+
+<!-- SECTION 1: ASSUMPTIONS (Mandated at beginning) -->
+<h2 class="section-title">1. Engineering Assumptions (Mandatory Declaration)</h2>
+<p>In accordance with the assessment instructions permitting reasonable assumptions, the following foundational architectural assumptions were established at the inception of the solution:</p>
+<ol>
+  <li><strong>Employee Code Generation & Immutability:</strong> The alphanumeric Employee Code (e.g., <code>I0001</code>, <code>H0001</code>) reflects an employee’s active departmental assignment. It remains strictly immutable during routine profile edits and is only altered upon the execution of an authorized <strong>Department Transfer</strong>, upon which a new sequential code is automatically allocated.</li>
+  <li><strong>Internal Primary Key Preservation:</strong> For database referential integrity and audit compliance, the internal database primary key (<code>id BIGINT</code>) never changes throughout an employee’s organizational lifecycle. All past historical audit records, transfer logs, and system references remain linked to this surrogate key.</li>
+  <li><strong>Sensitive Identity Data Privacy:</strong> In strict alignment with Requirement Task B.5, <strong>Aadhaar numbers and PAN are deliberately excluded from unrestricted global text search</strong> to prevent inadvertent identification data leakage. Furthermore, Aadhaar digits are masked in the UI (<code>XXXX-XXXX-1234</code>) with role-restricted unmask toggles.</li>
+  <li><strong>Department Sequence Concurrency Control:</strong> To eliminate race conditions under concurrent employee onboarding or simultaneous department transfers, sequence increments are managed using <strong>Pessimistic Row-Level Locking</strong> (<code>SELECT ... FOR UPDATE</code>), ensuring zero duplicate code generation.</li>
+  <li><strong>Statutory Currency & Compensation Standards:</strong> All financial compensation figures are modeled in Indian Rupees (INR ₹) with predefined Lakhs Per Annum (LPA) filtering bands (₹1–3 LPA, ₹3–5 LPA, ₹5–10 LPA, ₹10+ LPA, and custom).</li>
+</ol>
+
+<!-- SECTION 2: CERTIFICATE OF ORIGINALITY -->
+<h2 class="section-title">2. Candidate Undertaking & Certificate</h2>
+<div class="cert-box">
+  <p style="text-align: center; font-weight: bold; font-size: 11pt; text-transform: uppercase; margin-top: 0; color: #0b132b;">
+    Certificate of Independent Original Work
+  </p>
+  <p style="font-size: 9.5pt; text-align: justify;">
+    I, <strong>Saket Rajak</strong>, hereby certify that this technical assessment for the <em>Process Automation and Application Development Intern</em> vacancy under the <strong>Indian Army Internship Programme (IAIP) 2026</strong> has been independently completed by me. The solution, including all database schemas, backend RESTful APIs, Spring Security RBAC configurations, and responsive React frontend components, represents my authentic work and architectural design. All external libraries, packages, and frameworks utilized have been transparently declared in the dependency manifests below.
+  </p>
+  <div class="sig-grid">
+    <div class="sig-item">
+      Candidate Signature: _______________________<br>
+      Name: <strong>Saket Rajak</strong><br>
+      Email: <code>saketsince05@gmail.com</code>
+    </div>
+    <div class="sig-item">
+      Date of Submission: <strong>31 October 2026</strong><br>
+      Place: <strong>Pune / Maharashtra</strong><br>
+      Submission Deadline: <strong>Within 48 Hours</strong>
+    </div>
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION 3: SYSTEM ARCHITECTURE -->
+<h2 class="section-title">3. System Architecture & Component Design</h2>
+<p>The application is architected following the standard 3-tier enterprise pattern with strict separation of concerns, stateless token authentication, and ACID transaction boundaries:</p>
+
+<div class="arch-box">
+┌────────────────────────────────────────────────────────────────────────┐
+│                          SYSTEM TOPOLOGY                               │
+├────────────────────────────────────────────────────────────────────────┤
+│  TIER 1: PRESENTATION (React 19 + Vite + Tailwind CSS + Lucide)        │
+│  - Responsive Directory Table with Server-side Pagination (5, 10, 20)  │
+│  - Real-Time Aadhaar Auto-Hyphenation (XXXX-XXXX-XXXX) & PAN Regex     │
+│  - Dynamic LPA Salary Preset Filter Drawer & Debounced Search Bar      │
+│  - Atomic Department Transfer Modal with Live Target Code Preview      │
+│  - Personnel 360° Profile Dossier with Aadhaar Masking & Timeline      │
+│                                   │                                    │
+│                           REST API / JWT Bearer                        │
+│                                   ▼                                    │
+│  TIER 2: APPLICATION SERVICE (Java 21 • Spring Boot 3.4.1)             │
+│  - Stateless JWT Authentication Provider & SecurityFilterChain         │
+│  - Role-Based Access Control (RBAC: ADMIN, MANAGER, EMPLOYEE)          │
+│  - Atomic Department Sequence Generator (Pessimistic Row Lock)         │
+│  - Transactional Department Transfer Engine (@Transactional Rollback)  │
+│  - Privacy Protection Filter (Excludes Aadhaar/PAN from Global Search) │
+│  - Springdoc OpenAPI 3.0 / Swagger Interactive Documentation Engine    │
+│                                   │                                    │
+│                           JPA / Hibernate ORM                          │
+│                                   ▼                                    │
+│  TIER 3: PERSISTENCE (PostgreSQL 17+ • Supabase Cloud Database)         │
+│  - 7 Relational Tables with Primary/Foreign Keys & Unique Constraints  │
+│  - Department Sequence Counter Table (employee_code_sequences)         │
+│  - Immutable Transfer Audit Trail Table (employee_transfer_history)    │
+└────────────────────────────────────────────────────────────────────────┘
+</div>
+
+<!-- SECTION 4: DATABASE DEVELOPMENT (TASK C) -->
+<h2 class="section-title">4. Relational Database Development (Task C)</h2>
+<p>The database schema is implemented in PostgreSQL with strict normalization, declarative constraints, and performance indexes:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Table Name</th>
+      <th>Primary Key</th>
+      <th>Foreign Keys & Key Constraints</th>
+      <th>Business Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>departments</code></td>
+      <td><code>id (SERIAL)</code></td>
+      <td><code>name UNIQUE</code>, <code>code_prefix UNIQUE</code></td>
+      <td>Maintains organizational departments and assigned code prefixes (IT: I, HR: H, Fin: F, Sales: S, Admin: A).</td>
+    </tr>
+    <tr>
+      <td><code>roles</code></td>
+      <td><code>id (SERIAL)</code></td>
+      <td><code>name UNIQUE</code></td>
+      <td>System roles governing role-based access control (Admin, Manager, Employee).</td>
+    </tr>
+    <tr>
+      <td><code>employee_code_sequences</code></td>
+      <td><code>department_id</code></td>
+      <td><code>FK -> departments(id)</code></td>
+      <td>Tracks the current sequential integer per department for atomic code generation.</td>
+    </tr>
+    <tr>
+      <td><code>employees</code></td>
+      <td><code>id (BIGSERIAL)</code></td>
+      <td><code>employee_code UNIQUE</code>, <code>FK -> departments</code>, <code>FK -> roles</code></td>
+      <td>Core employment entity storing status, joining date, and annual salary (> 0).</td>
+    </tr>
+    <tr>
+      <td><code>employee_personal_details</code></td>
+      <td><code>id (BIGSERIAL)</code></td>
+      <td><code>employee_id UNIQUE (FK)</code>, <code>email UNIQUE</code></td>
+      <td>Stores sensitive personal data: Full Name, Email, Mobile, Aadhaar, PAN, DOB, Gender, Address.</td>
+    </tr>
+    <tr>
+      <td><code>employee_transfer_history</code></td>
+      <td><code>id (BIGSERIAL)</code></td>
+      <td><code>FK -> employees</code>, <code>FK -> departments (old/new)</code></td>
+      <td>Immutable audit log capturing transfer transitions, old/new codes, dates, and justifications.</td>
+    </tr>
+    <tr>
+      <td><code>users</code></td>
+      <td><code>id (BIGSERIAL)</code></td>
+      <td><code>username UNIQUE</code>, <code>email UNIQUE</code>, <code>FK -> employees</code></td>
+      <td>Authentication credentials with BCrypt password hashes and associated RBAC role.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout-box">
+  <p><strong>Sample Dataset Seeding:</strong> The database has been pre-seeded with <strong>5 Departments</strong>, <strong>3 Roles</strong>, <strong>22 diverse Personnel Records</strong> across all four salary bands (₹1–3 LPA, ₹3–5 LPA, ₹5–10 LPA, ₹10+ LPA), historical department transfers, and default administrative users.</p>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION 5: BACKEND REST APIS (TASK B) -->
+<h2 class="section-title">5. Backend REST API Architecture (Task B)</h2>
+
+<h3 class="sub-title">5.1 Core Endpoint Catalog</h3>
+<table>
+  <thead>
+    <tr>
+      <th>HTTP Method & Path</th>
+      <th>Access Role</th>
+      <th>Key Parameters / Request Body</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>POST /api/auth/login</code></td>
+      <td>Public</td>
+      <td><code>username</code>, <code>password</code></td>
+      <td>Authenticates user and returns signed stateless JWT Bearer token.</td>
+    </tr>
+    <tr>
+      <td><code>GET /api/employees</code></td>
+      <td>Authenticated</td>
+      <td><code>search, departmentId, roleId, status, gender, minSalary, maxSalary, sortBy, sortDir, pageNumber, pageSize</code></td>
+      <td>Server-side global search, multi-facet filtering, sorting, and pagination (5, 10, 20).</td>
+    </tr>
+    <tr>
+      <td><code>GET /api/employees/{id}</code></td>
+      <td>Authenticated</td>
+      <td><code>id (Path)</code></td>
+      <td>Retrieves complete 360° employee dossier including personal details and transfer history.</td>
+    </tr>
+    <tr>
+      <td><code>POST /api/employees</code></td>
+      <td>Admin, Manager</td>
+      <td><code>EmployeeCreateRequest (JSON)</code></td>
+      <td>Registers new employee, atomically generates department sequence code, and stores personal data.</td>
+    </tr>
+    <tr>
+      <td><code>PUT /api/employees/{id}</code></td>
+      <td>Admin, Manager</td>
+      <td><code>EmployeeUpdateRequest (JSON)</code></td>
+      <td>Updates employee personal and employment information with duplicate checks.</td>
+    </tr>
+    <tr>
+      <td><code>PATCH /api/employees/{id}/deactivate</code></td>
+      <td>Admin</td>
+      <td><code>id (Path)</code></td>
+      <td>Deactivates employee account by switching status to <code>INACTIVE</code>.</td>
+    </tr>
+    <tr>
+      <td><code>DELETE /api/employees/{id}</code></td>
+      <td>Admin</td>
+      <td><code>id (Path)</code></td>
+      <td>Permanently deletes employee record and cascading personal details.</td>
+    </tr>
+    <tr>
+      <td><code>POST /api/transfers</code></td>
+      <td>Admin, Manager</td>
+      <td><code>employeeId, newDepartmentId, transferDate, reason</code></td>
+      <td>Executes atomic department transfer, re-allocates code, and records audit trail.</td>
+    </tr>
+    <tr>
+      <td><code>GET /api/transfers/employee/{id}</code></td>
+      <td>Authenticated</td>
+      <td><code>employeeId (Path)</code></td>
+      <td>Retrieves historical transfer timeline for a specific employee.</td>
+    </tr>
+    <tr>
+      <td><code>GET /api/lookup/departments</code></td>
+      <td>Public</td>
+      <td>None</td>
+      <td>Retrieves all configured departments with code prefixes.</td>
+    </tr>
+    <tr>
+      <td><code>GET /api/lookup/preview-code/{deptId}</code></td>
+      <td>Public</td>
+      <td><code>deptId (Path)</code></td>
+      <td>Calculates and previews the next available employee code for a department.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">5.2 Technical Concurrency & Transaction Implementation</h3>
+<ul>
+  <li><strong>Atomic Code Generation Service:</strong> Uses <code>@Lock(LockModeType.PESSIMISTIC_WRITE)</code> to acquire an exclusive lock on the departmental sequence row during increment operations. This guarantees zero duplicate codes even under simultaneous requests.</li>
+  <li><strong>Department Transfer Engine:</strong> Enclosed within <code>@Transactional(rollbackFor = Exception.class)</code>. If code generation, employee update, or audit logging encounters an exception, the entire transaction is rolled back, preventing orphaned or corrupt state.</li>
+  <li><strong>Statutory Validations:</strong> Enforced through Jakarta Bean Validation (<code>@Pattern</code> for 10-digit mobile and PAN format <code>ABCDE1234F</code>, <code>@DecimalMin</code> for positive salary, and <code>@Past</code> for Date of Birth).</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- SECTION 6: FRONTEND ARCHITECTURE (TASK A) -->
+<h2 class="section-title">6. Frontend Web Application (Task A)</h2>
+<p>The client is built using <strong>React 19 with Vite and Tailwind CSS</strong>, styled with a professional military/defense palette (slate, navy, and emerald accents):</p>
+
+<h3 class="sub-title">6.1 Core Frontend Features</h3>
+<ol>
+  <li><strong>Employee Management Directory Table:</strong> Displays Employee Code, Full Name, Department, Role, Contact, Annual Salary (INR formatted), Status badge, and contextual action buttons. Supports multi-column ascending/descending sorting and server-side pagination with 5, 10, and 20 rows per page.</li>
+  <li><strong>Reactive Aadhaar Input Auto-Formatting:</strong> Automatically injects hyphens into the Aadhaar input field as the user types (<code>XXXX-XXXX-XXXX</code>) and caps at exactly 12 numeric digits with immediate visual feedback.</li>
+  <li><strong>Statutory PAN Card Validator:</strong> Enforces uppercase format conversion and regex validation (<code>[A-Z]{5}[0-9]{4}[A-Z]{1}</code>) in real time before submission.</li>
+  <li><strong>Combined Global Search & Multi-Filter Drawer:</strong> Debounced global search across permitted text fields combined with simultaneous filters for Department, Role, Status, Gender, Joining Date, and <strong>Salary LPA presets (₹1–3 LPA, ₹3–5 LPA, ₹5–10 LPA, ₹10+ LPA, or custom Min/Max)</strong>.</li>
+  <li><strong>Department Transfer Modal:</strong> Displays employee details, disables reassignment to current department, dynamically queries the API to display the <em>projected new code</em>, and collects an official transfer justification.</li>
+  <li><strong>Personnel 360° Profile Dossier:</strong> Modal displaying personal, identity, and employment records with an interactive Aadhaar masking toggle (<code>XXXX-XXXX-1234</code>) and a chronological transfer audit timeline.</li>
+</ol>
+
+<!-- SECTION 7: EXACT DEPENDENCY MANIFEST -->
+<h2 class="section-title">7. Exact Dependency Manifest (Rule 8 & 218 Compliance)</h2>
+<p>In accordance with submission guidelines, only the exact dependencies required for the project runtime are installed:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>Group ID / Package</th>
+      <th>Artifact ID / Module</th>
+      <th>Exact Version</th>
+      <th>Runtime Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Backend</td>
+      <td><code>org.springframework.boot</code></td>
+      <td><code>spring-boot-starter-web</code></td>
+      <td><code>3.4.1</code></td>
+      <td>REST API dispatching, Jackson JSON serialization</td>
+    </tr>
+    <tr>
+      <td>Backend</td>
+      <td><code>org.springframework.boot</code></td>
+      <td><code>spring-boot-starter-data-jpa</code></td>
+      <td><code>3.4.1</code></td>
+      <td>Spring Data JPA, Hibernate ORM, Transaction Manager</td>
+    </tr>
+    <tr>
+      <td>Backend</td>
+      <td><code>org.springframework.boot</code></td>
+      <td><code>spring-boot-starter-validation</code></td>
+      <td><code>3.4.1</code></td>
+      <td>Jakarta Bean Validation 3.0 annotations</td>
+    </tr>
+    <tr>
+      <td>Backend</td>
+      <td><code>org.springframework.boot</code></td>
+      <td><code>spring-boot-starter-security</code></td>
+      <td><code>3.4.1</code></td>
+      <td>SecurityFilterChain, BCryptPasswordEncoder, RBAC</td>
+    </tr>
+    <tr>
+      <td>Backend</td>
+      <td><code>org.postgresql</code></td>
+      <td><code>postgresql</code></td>
+      <td><code>42.7.4</code></td>
+      <td>PostgreSQL Production JDBC Database Driver</td>
+    </tr>
+    <tr>
+      <td>Backend</td>
+      <td><code>org.springdoc</code></td>
+      <td><code>springdoc-openapi-starter-webmvc-ui</code></td>
+      <td><code>2.8.3</code></td>
+      <td>OpenAPI 3.0 & Swagger UI (<code>/swagger-ui.html</code>)</td>
+    </tr>
+    <tr>
+      <td>Backend</td>
+      <td><code>io.jsonwebtoken</code></td>
+      <td><code>jjwt-api / impl / jackson</code></td>
+      <td><code>0.12.6</code></td>
+      <td>Stateless HS256 JWT creation, signing & parsing</td>
+    </tr>
+    <tr>
+      <td>Frontend</td>
+      <td><code>react</code> / <code>react-dom</code></td>
+      <td>UI Library</td>
+      <td><code>19.3.1</code></td>
+      <td>Component lifecycle and reactive state rendering</td>
+    </tr>
+    <tr>
+      <td>Frontend</td>
+      <td><code>vite</code></td>
+      <td>Build Tool & Dev Server</td>
+      <td><code>8.3.5</code></td>
+      <td>Fast ES-module development and production bundling</td>
+    </tr>
+    <tr>
+      <td>Frontend</td>
+      <td><code>tailwindcss</code></td>
+      <td>CSS Framework</td>
+      <td><code>3.4.17</code></td>
+      <td>Responsive enterprise styling and utility classes</td>
+    </tr>
+    <tr>
+      <td>Frontend</td>
+      <td><code>axios</code></td>
+      <td>HTTP Client</td>
+      <td><code>1.8.2</code></td>
+      <td>API communication with Bearer token interceptor</td>
+    </tr>
+    <tr>
+      <td>Frontend</td>
+      <td><code>lucide-react</code></td>
+      <td>Icon Set</td>
+      <td><code>1.16.0</code></td>
+      <td>Interface iconography</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<!-- SECTION 8: SETUP & EXECUTION GUIDE -->
+<h2 class="section-title">8. Installation & Verification Instructions</h2>
+
+<h3 class="sub-title">8.1 Pre-Seeded Default Authentication Credentials</h3>
+<table>
+  <thead>
+    <tr>
+      <th>User Role</th>
+      <th>Username</th>
+      <th>Password</th>
+      <th>Authorization Scope</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Admin</strong></td>
+      <td><code>admin</code></td>
+      <td><code>Admin@123</code></td>
+      <td>Full CRUD, Department Transfer, Account Deactivation, System Oversight</td>
+    </tr>
+    <tr>
+      <td><strong>Manager</strong></td>
+      <td><code>manager</code></td>
+      <td><code>Manager@123</code></td>
+      <td>Employee Directory View, Edit Details, Initiate Department Transfer</td>
+    </tr>
+    <tr>
+      <td><strong>Employee</strong></td>
+      <td><code>employee</code></td>
+      <td><code>Employee@123</code></td>
+      <td>Read-Only Directory View & Personal Dossier Review</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub-title">8.2 Restoration & Local Execution Commands</h3>
+<div class="arch-box">
+# 1. Database Execution
+Execute schema.sql and seed.sql in PostgreSQL or Supabase SQL Editor:
+psql -U postgres -d postgres -f database/schema.sql
+psql -U postgres -d postgres -f database/seed.sql
+
+# 2. Backend Execution (Spring Boot REST API)
+cd backend
+mvn clean compile
+mvn spring-boot:run
+# Live Swagger Documentation: http://localhost:8080/swagger-ui.html
+
+# 3. Frontend Execution (React + Vite Dashboard)
+cd frontend
+npm install
+npm run dev
+# Live Client Dashboard: http://localhost:5173
+</div>
+
+<!-- SECTION 9: REPOSITORY & BUNDLE VERIFICATION -->
+<h2 class="section-title">9. Submission Deliverables Summary</h2>
+<ul>
+  <li><strong>GitHub Repository URL:</strong> <a href="https://github.com/Saketrajak/Nxt-Gen-Employee-Management-System">https://github.com/Saketrajak/Nxt-Gen-Employee-Management-System</a></li>
+  <li><strong>Source Code Bundle:</strong> <code>IAIP_EMS_Saket_Rajak.zip</code> (Sanitized, excluding <code>node_modules</code>, <code>target</code>, and passwords as required by Rule 220).</li>
+  <li><strong>OpenAPI 3.0 Documentation:</strong> <code>docs/openapi_spec.json</code> and interactive Swagger UI at <code>/swagger-ui.html</code>.</li>
+  <li><strong>Postman Test Collection:</strong> <code>docs/IAIP_EMS_Postman_Collection.json</code> containing pre-configured requests for all endpoints.</li>
+  <li><strong>Submission PDF Report:</strong> This document, incorporating all design specifications, assumptions, and candidate undertaking.</li>
+</ul>
+
+</body>
+</html>
+

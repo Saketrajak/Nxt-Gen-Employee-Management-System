@@ -1,0 +1,164 @@
+{
+  "info": {
+    "name": "IAIP - Employee Management System REST API",
+    "description": "Postman Collection for Indian Army Internship Programme 2026 - HQ Southern Command Assessment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Lookups",
+      "item": [
+        {
+          "name": "Get Departments",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/lookup/departments", "host": ["{{baseUrl}}"], "path": ["api", "lookup", "departments"] }
+          }
+        },
+        {
+          "name": "Get Roles",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/lookup/roles", "host": ["{{baseUrl}}"], "path": ["api", "lookup", "roles"] }
+          }
+        },
+        {
+          "name": "Preview Next Code (IT Dept)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/lookup/preview-code/1", "host": ["{{baseUrl}}"], "path": ["api", "lookup", "preview-code", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Employee Management",
+      "item": [
+        {
+          "name": "Get Employees (Paged & Sorted)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/employees?pageNumber=1&pageSize=10&sortBy=id&sortDir=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "employees"],
+              "query": [
+                { "key": "pageNumber", "value": "1" },
+                { "key": "pageSize", "value": "10" },
+                { "key": "sortBy", "value": "id" },
+                { "key": "sortDir", "value": "asc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Global Search (Permitted Fields)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/employees?search=Rahul", "host": ["{{baseUrl}}"], "path": ["api", "employees"], "query": [{ "key": "search", "value": "Rahul" }] }
+          }
+        },
+        {
+          "name": "Multi-Filter (Dept + Salary Range LPA)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/employees?departmentId=1&minSalary=300000&maxSalary=1000000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "employees"],
+              "query": [
+                { "key": "departmentId", "value": "1" },
+                { "key": "minSalary", "value": "300000" },
+                { "key": "maxSalary", "value": "1000000" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Employee by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/employees/1", "host": ["{{baseUrl}}"], "path": ["api", "employees", "1"] }
+          }
+        },
+        {
+          "name": "Register Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Lt. Arjun Singh\",\n  \"email\": \"arjun.singh@iaip.gov.in\",\n  \"mobile\": \"9811223344\",\n  \"aadhaarNumber\": \"4521-8765-9012\",\n  \"panNumber\": \"ARJUN1234S\",\n  \"dateOfBirth\": \"1996-05-15\",\n  \"gender\": \"Male\",\n  \"address\": \"Officers Enclave, Southern Command, Pune\",\n  \"departmentId\": 1,\n  \"roleId\": 3,\n  \"status\": \"ACTIVE\",\n  \"joiningDate\": \"2024-01-10\",\n  \"annualSalary\": 850000.00\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/employees", "host": ["{{baseUrl}}"], "path": ["api", "employees"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Department Transfers",
+      "item": [
+        {
+          "name": "Execute Department Transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employeeId\": 3,\n  \"newDepartmentId\": 2,\n  \"transferDate\": \"2024-11-01\",\n  \"reason\": \"Reassigned to HR Personnel Analytics cell.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/transfers", "host": ["{{baseUrl}}"], "path": ["api", "transfers"] }
+          }
+        },
+        {
+          "name": "Get Transfer History for Employee",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/transfers/employee/3", "host": ["{{baseUrl}}"], "path": ["api", "transfers", "employee", "3"] }
+          }
+        }
+      ]
+    }
+  ]
+}
+
