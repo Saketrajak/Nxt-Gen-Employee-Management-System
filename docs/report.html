@@ -191,33 +191,10 @@
   <li><strong>Statutory Currency & Compensation Standards:</strong> All financial compensation figures are modeled in Indian Rupees (INR ₹) with predefined Lakhs Per Annum (LPA) filtering bands (₹1–3 LPA, ₹3–5 LPA, ₹5–10 LPA, ₹10+ LPA, and custom).</li>
 </ol>
 
-<!-- SECTION 2: CERTIFICATE OF ORIGINALITY -->
-<h2 class="section-title">2. Candidate Undertaking & Certificate</h2>
-<div class="cert-box">
-  <p style="text-align: center; font-weight: bold; font-size: 11pt; text-transform: uppercase; margin-top: 0; color: #0b132b;">
-    Certificate of Independent Original Work
-  </p>
-  <p style="font-size: 9.5pt; text-align: justify;">
-    I, <strong>Saket Rajak</strong>, hereby certify that this technical assessment for the <em>Process Automation and Application Development Intern</em> vacancy under the <strong>Indian Army Internship Programme (IAIP) 2026</strong> has been independently completed by me. The solution, including all database schemas, backend RESTful APIs, Spring Security RBAC configurations, and responsive React frontend components, represents my authentic work and architectural design. All external libraries, packages, and frameworks utilized have been transparently declared in the dependency manifests below.
-  </p>
-  <div class="sig-grid">
-    <div class="sig-item">
-      Candidate Signature: _______________________<br>
-      Name: <strong>Saket Rajak</strong><br>
-      Email: <code>saketsince05@gmail.com</code>
-    </div>
-    <div class="sig-item">
-      Date of Submission: <strong>31 October 2026</strong><br>
-      Place: <strong>Pune / Maharashtra</strong><br>
-      Submission Deadline: <strong>Within 48 Hours</strong>
-    </div>
-  </div>
-</div>
-
 <div class="page-break"></div>
 
-<!-- SECTION 3: SYSTEM ARCHITECTURE -->
-<h2 class="section-title">3. System Architecture & Component Design</h2>
+<!-- SECTION 2: SYSTEM ARCHITECTURE -->
+<h2 class="section-title">2. System Architecture & Component Design</h2>
 <p>The application is architected following the standard 3-tier enterprise pattern with strict separation of concerns, stateless token authentication, and ACID transaction boundaries:</p>
 
 <div class="arch-box">
@@ -250,8 +227,8 @@
 └────────────────────────────────────────────────────────────────────────┘
 </div>
 
-<!-- SECTION 4: DATABASE DEVELOPMENT (TASK C) -->
-<h2 class="section-title">4. Relational Database Development (Task C)</h2>
+<!-- SECTION 3: DATABASE DEVELOPMENT (TASK C) -->
+<h2 class="section-title">3. Relational Database Development (Task C)</h2>
 <p>The database schema is implemented in PostgreSQL with strict normalization, declarative constraints, and performance indexes:</p>
 
 <table>
@@ -315,10 +292,10 @@
 
 <div class="page-break"></div>
 
-<!-- SECTION 5: BACKEND REST APIS (TASK B) -->
-<h2 class="section-title">5. Backend REST API Architecture (Task B)</h2>
+<!-- SECTION 4: BACKEND REST APIS (TASK B) -->
+<h2 class="section-title">4. Backend REST API Architecture (Task B)</h2>
 
-<h3 class="sub-title">5.1 Core Endpoint Catalog</h3>
+<h3 class="sub-title">4.1 Core Endpoint Catalog</h3>
 <table>
   <thead>
     <tr>
@@ -398,7 +375,7 @@
   </tbody>
 </table>
 
-<h3 class="sub-title">5.2 Technical Concurrency & Transaction Implementation</h3>
+<h3 class="sub-title">4.2 Technical Concurrency & Transaction Implementation</h3>
 <ul>
   <li><strong>Atomic Code Generation Service:</strong> Uses <code>@Lock(LockModeType.PESSIMISTIC_WRITE)</code> to acquire an exclusive lock on the departmental sequence row during increment operations. This guarantees zero duplicate codes even under simultaneous requests.</li>
   <li><strong>Department Transfer Engine:</strong> Enclosed within <code>@Transactional(rollbackFor = Exception.class)</code>. If code generation, employee update, or audit logging encounters an exception, the entire transaction is rolled back, preventing orphaned or corrupt state.</li>
@@ -407,11 +384,11 @@
 
 <div class="page-break"></div>
 
-<!-- SECTION 6: FRONTEND ARCHITECTURE (TASK A) -->
-<h2 class="section-title">6. Frontend Web Application (Task A)</h2>
+<!-- SECTION 5: FRONTEND ARCHITECTURE (TASK A) -->
+<h2 class="section-title">5. Frontend Web Application (Task A)</h2>
 <p>The client is built using <strong>React 19 with Vite and Tailwind CSS</strong>, styled with a professional military/defense palette (slate, navy, and emerald accents):</p>
 
-<h3 class="sub-title">6.1 Core Frontend Features</h3>
+<h3 class="sub-title">5.1 Core Frontend Features</h3>
 <ol>
   <li><strong>Employee Management Directory Table:</strong> Displays Employee Code, Full Name, Department, Role, Contact, Annual Salary (INR formatted), Status badge, and contextual action buttons. Supports multi-column ascending/descending sorting and server-side pagination with 5, 10, and 20 rows per page.</li>
   <li><strong>Reactive Aadhaar Input Auto-Formatting:</strong> Automatically injects hyphens into the Aadhaar input field as the user types (<code>XXXX-XXXX-XXXX</code>) and caps at exactly 12 numeric digits with immediate visual feedback.</li>
@@ -421,8 +398,8 @@
   <li><strong>Personnel 360° Profile Dossier:</strong> Modal displaying personal, identity, and employment records with an interactive Aadhaar masking toggle (<code>XXXX-XXXX-1234</code>) and a chronological transfer audit timeline.</li>
 </ol>
 
-<!-- SECTION 7: EXACT DEPENDENCY MANIFEST -->
-<h2 class="section-title">7. Exact Dependency Manifest (Rule 8 & 218 Compliance)</h2>
+<!-- SECTION 6: EXACT DEPENDENCY MANIFEST -->
+<h2 class="section-title">6. Exact Dependency Manifest (Rule 8 & 218 Compliance)</h2>
 <p>In accordance with submission guidelines, only the exact dependencies required for the project runtime are installed:</p>
 
 <table>
@@ -525,10 +502,10 @@
 
 <div class="page-break"></div>
 
-<!-- SECTION 8: SETUP & EXECUTION GUIDE -->
-<h2 class="section-title">8. Installation & Verification Instructions</h2>
+<!-- SECTION 7: SETUP & EXECUTION GUIDE -->
+<h2 class="section-title">7. Installation & Verification Instructions</h2>
 
-<h3 class="sub-title">8.1 Pre-Seeded Default Authentication Credentials</h3>
+<h3 class="sub-title">7.1 Pre-Seeded Default Authentication Credentials</h3>
 <table>
   <thead>
     <tr>
@@ -560,7 +537,7 @@
   </tbody>
 </table>
 
-<h3 class="sub-title">8.2 Restoration & Local Execution Commands</h3>
+<h3 class="sub-title">7.2 Restoration & Local Execution Commands</h3>
 <div class="arch-box">
 # 1. Database Execution
 Execute schema.sql and seed.sql in PostgreSQL or Supabase SQL Editor:
@@ -580,14 +557,14 @@ npm run dev
 # Live Client Dashboard: http://localhost:5173
 </div>
 
-<!-- SECTION 9: REPOSITORY & BUNDLE VERIFICATION -->
-<h2 class="section-title">9. Submission Deliverables Summary</h2>
+<!-- SECTION 8: REPOSITORY & BUNDLE VERIFICATION -->
+<h2 class="section-title">8. Submission Deliverables Summary</h2>
 <ul>
   <li><strong>GitHub Repository URL:</strong> <a href="https://github.com/Saketrajak/Nxt-Gen-Employee-Management-System">https://github.com/Saketrajak/Nxt-Gen-Employee-Management-System</a></li>
   <li><strong>Source Code Bundle:</strong> <code>IAIP_EMS_Saket_Rajak.zip</code> (Sanitized, excluding <code>node_modules</code>, <code>target</code>, and passwords as required by Rule 220).</li>
   <li><strong>OpenAPI 3.0 Documentation:</strong> <code>docs/openapi_spec.json</code> and interactive Swagger UI at <code>/swagger-ui.html</code>.</li>
   <li><strong>Postman Test Collection:</strong> <code>docs/IAIP_EMS_Postman_Collection.json</code> containing pre-configured requests for all endpoints.</li>
-  <li><strong>Submission PDF Report:</strong> This document, incorporating all design specifications, assumptions, and candidate undertaking.</li>
+  <li><strong>Submission PDF Report:</strong> This document, incorporating all design specifications, architecture, and evaluation instructions.</li>
 </ul>
 
 </body>
