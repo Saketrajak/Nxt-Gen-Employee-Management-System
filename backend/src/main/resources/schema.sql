@@ -106,3 +106,4 @@ CREATE INDEX idx_personal_details_mobile ON employee_personal_details(mobile);
 CREATE INDEX idx_personal_details_aadhaar ON employee_personal_details(aadhaar_number);
 CREATE INDEX idx_personal_details_pan ON employee_personal_details(pan_number);
 CREATE INDEX idx_transfer_history_emp ON employee_transfer_history(employee_id);
+

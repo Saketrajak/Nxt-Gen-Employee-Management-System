@@ -22,58 +22,66 @@ export default function StatCards({
     {
       id: 'total',
       title: 'Total Personnel',
+      subtitle: 'Strength on Roll',
       value: totalRecords,
-      desc: 'Registered in database',
+      desc: 'Registered cadre in records',
       icon: Users,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-100',
+      color: 'text-slate-800',
+      bgColor: 'bg-slate-100',
+      borderColor: 'border-slate-300',
+      borderAccent: 'border-l-4 border-l-slate-800',
       onClick: onTotalClick,
-      activeRing: isTotalActive ? 'ring-2 ring-blue-500 border-blue-300 bg-blue-50/20 shadow-sm' : '',
-      actionHint: isTotalActive ? 'Viewing all personnel' : 'Click to show all personnel',
-      actionColor: isTotalActive ? 'text-blue-600 font-semibold' : 'text-blue-600 font-medium underline',
+      activeRing: isTotalActive ? 'ring-2 ring-slate-700 border-slate-300 bg-slate-50/50 shadow-sm' : '',
+      actionHint: isTotalActive ? 'Viewing full cadre' : 'Click to show all personnel',
+      actionColor: isTotalActive ? 'text-slate-700 font-semibold' : 'text-slate-500 font-medium underline',
     },
     {
       id: 'active',
       title: 'Active Employees',
+      subtitle: 'On Active Duty',
       value: activeCount,
-      desc: 'Currently on duty',
+      desc: 'Currently in regular service',
       icon: UserCheck,
-      color: 'text-emerald-600',
+      color: 'text-[#1e3e26]',
       bgColor: 'bg-emerald-50',
-      borderColor: 'border-emerald-100',
+      borderColor: 'border-emerald-300',
+      borderAccent: 'border-l-4 border-l-[#244b2f]',
       onClick: onActiveClick,
-      activeRing: isActiveFiltered ? 'ring-2 ring-emerald-500 border-emerald-300 bg-emerald-50/30 shadow-sm' : '',
-      actionHint: isActiveFiltered ? 'Active filter on • Click to clear' : 'Click to filter active',
-      actionColor: isActiveFiltered ? 'text-emerald-700 font-semibold' : 'text-slate-400',
+      activeRing: isActiveFiltered ? 'ring-2 ring-[#244b2f] border-emerald-400 bg-emerald-50/30 shadow-sm' : '',
+      actionHint: isActiveFiltered ? 'Active filter on • Click to clear' : 'Click to filter active duty',
+      actionColor: isActiveFiltered ? 'text-[#1e3e26] font-semibold' : 'text-slate-400',
     },
     {
       id: 'departments',
       title: 'Departments',
+      subtitle: 'Formations & Corps',
       value: departmentCount || 5,
       desc: 'IT, HR, Fin, Sales, Admin',
       icon: Building2,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-100',
+      color: 'text-stone-800',
+      bgColor: 'bg-stone-100',
+      borderColor: 'border-stone-300',
+      borderAccent: 'border-l-4 border-l-stone-700',
       onClick: onDepartmentsClick,
-      activeRing: isDeptFiltered ? 'ring-2 ring-purple-500 border-purple-300 bg-purple-50/30 shadow-sm' : '',
-      actionHint: isDeptFiltered ? 'Dept filter active • Click to view' : 'Click to view breakdown',
-      actionColor: isDeptFiltered ? 'text-purple-700 font-semibold' : 'text-slate-400',
+      activeRing: isDeptFiltered ? 'ring-2 ring-stone-700 border-stone-400 bg-stone-50/40 shadow-sm' : '',
+      actionHint: isDeptFiltered ? 'Dept filter active • Click to view' : 'Click to manage departments',
+      actionColor: isDeptFiltered ? 'text-stone-800 font-semibold' : 'text-slate-400',
     },
     {
       id: 'transfers',
       title: 'Department Transfers',
+      subtitle: 'Postings & Movements',
       value: transferCount,
-      desc: 'Complete audit history',
+      desc: 'Verified service audit log',
       icon: ArrowRightLeft,
-      color: 'text-amber-600',
+      color: 'text-amber-800',
       bgColor: 'bg-amber-50',
-      borderColor: 'border-amber-100',
+      borderColor: 'border-amber-300',
+      borderAccent: 'border-l-4 border-l-amber-700',
       onClick: onTransfersClick,
       activeRing: '',
-      actionHint: 'Click to view audit log',
-      actionColor: 'text-amber-700 hover:underline',
+      actionHint: 'Click to view postings audit',
+      actionColor: 'text-amber-800 hover:underline font-medium',
     },
   ];
 
@@ -86,21 +94,23 @@ export default function StatCards({
             key={stat.id}
             type="button"
             onClick={stat.onClick}
-            className={`w-full text-left bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer group ${stat.activeRing}`}
+            className={`w-full text-left bg-white rounded-lg p-5 border border-slate-200 shadow-xs flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer group ${stat.borderAccent} ${stat.activeRing}`}
           >
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider group-hover:text-slate-700 transition">
-                {stat.title}
-              </p>
-              <h3 className="text-2xl font-bold text-slate-900 mt-1">{stat.value}</h3>
-              <p className="text-xs text-slate-400 mt-0.5">{stat.desc}</p>
-              <div className="flex items-center space-x-1 mt-2 text-[11px]">
+              <div className="flex items-center space-x-1.5">
+                <p className="text-[11px] font-bold text-slate-600 uppercase tracking-wider group-hover:text-slate-900 transition">
+                  {stat.title}
+                </p>
+              </div>
+              <h3 className="text-2xl font-extrabold text-slate-900 mt-1 font-mono tracking-tight">{stat.value}</h3>
+              <p className="text-[11px] text-slate-500 mt-0.5">{stat.desc}</p>
+              <div className="flex items-center space-x-1 mt-2.5 text-[11px]">
                 <MousePointerClick className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                 <span className={stat.actionColor}>{stat.actionHint}</span>
               </div>
             </div>
-            <div className={`p-3 rounded-xl ${stat.bgColor} ${stat.borderColor} border group-hover:scale-105 transition-transform flex-shrink-0`}>
-              <Icon className={`w-6 h-6 ${stat.color}`} />
+            <div className={`p-3 rounded-lg ${stat.bgColor} ${stat.borderColor} border group-hover:scale-105 transition-transform flex-shrink-0 shadow-xs`}>
+              <Icon className={`w-5 h-5 ${stat.color}`} />
             </div>
           </button>
         );

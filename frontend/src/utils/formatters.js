@@ -56,18 +56,18 @@ export const formatDate = (dateString) => {
   }
 };
 
-// Status Badge Styling Helper
+// Status Badge Styling Helper - Tactical Defense Badges
 export const getStatusBadgeClass = (status) => {
   switch (status?.toUpperCase()) {
     case 'ACTIVE':
-      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      return 'bg-emerald-100/80 text-emerald-900 border-emerald-300 font-semibold tracking-wider text-[11px]';
     case 'PROBATION':
-      return 'bg-amber-50 text-amber-700 border-amber-200';
+      return 'bg-amber-100/80 text-amber-900 border-amber-300 font-semibold tracking-wider text-[11px]';
     case 'INACTIVE':
-      return 'bg-slate-100 text-slate-700 border-slate-200';
+      return 'bg-slate-200/80 text-slate-800 border-slate-300 font-semibold tracking-wider text-[11px]';
     case 'TERMINATED':
-      return 'bg-rose-50 text-rose-700 border-rose-200';
+      return 'bg-rose-100/80 text-rose-900 border-rose-300 font-semibold tracking-wider text-[11px]';
     default:
-      return 'bg-gray-50 text-gray-700 border-gray-200';
+      return 'bg-gray-100 text-gray-800 border-gray-300 font-medium text-[11px]';
   }
 };

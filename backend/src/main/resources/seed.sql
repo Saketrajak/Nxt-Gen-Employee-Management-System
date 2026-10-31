@@ -125,3 +125,4 @@ INSERT INTO users (username, email, password_hash, role, employee_id, is_active)
 ('employee', 'employee@iaip.gov.in', '$2a$10$w4X2NlW5v7bL5B.p0C8BzeE6Y7pY6H8Hn3H.p9C8BzeE6Y7pY6H8H', 'EMPLOYEE', 3, true);
 
 SELECT setval('users_id_seq', 3, true);
+
