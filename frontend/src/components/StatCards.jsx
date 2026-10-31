@@ -8,12 +8,13 @@ export default function StatCards({
   transferCount,
   activeStatus,
   activeDepartmentId,
+  hasActiveFilters,
   onTotalClick,
   onActiveClick,
   onDepartmentsClick,
   onTransfersClick,
 }) {
-  const isTotalActive = !activeStatus && !activeDepartmentId;
+  const isTotalActive = !hasActiveFilters;
   const isActiveFiltered = activeStatus === 'ACTIVE';
   const isDeptFiltered = Boolean(activeDepartmentId);
 
@@ -28,9 +29,9 @@ export default function StatCards({
       bgColor: 'bg-blue-50',
       borderColor: 'border-blue-100',
       onClick: onTotalClick,
-      activeRing: isTotalActive ? 'ring-2 ring-blue-500 border-blue-300 bg-blue-50/20' : '',
-      actionHint: isTotalActive ? 'Viewing all records' : 'Click to show all',
-      actionColor: isTotalActive ? 'text-blue-600 font-semibold' : 'text-slate-400',
+      activeRing: isTotalActive ? 'ring-2 ring-blue-500 border-blue-300 bg-blue-50/20 shadow-sm' : '',
+      actionHint: isTotalActive ? 'Viewing all personnel' : 'Click to show all personnel',
+      actionColor: isTotalActive ? 'text-blue-600 font-semibold' : 'text-blue-600 font-medium underline',
     },
     {
       id: 'active',
@@ -42,8 +43,8 @@ export default function StatCards({
       bgColor: 'bg-emerald-50',
       borderColor: 'border-emerald-100',
       onClick: onActiveClick,
-      activeRing: isActiveFiltered ? 'ring-2 ring-emerald-500 border-emerald-300 bg-emerald-50/30' : '',
-      actionHint: isActiveFiltered ? 'Filtered: Active only' : 'Click to filter active',
+      activeRing: isActiveFiltered ? 'ring-2 ring-emerald-500 border-emerald-300 bg-emerald-50/30 shadow-sm' : '',
+      actionHint: isActiveFiltered ? 'Active filter on • Click to clear' : 'Click to filter active',
       actionColor: isActiveFiltered ? 'text-emerald-700 font-semibold' : 'text-slate-400',
     },
     {
@@ -56,8 +57,8 @@ export default function StatCards({
       bgColor: 'bg-purple-50',
       borderColor: 'border-purple-100',
       onClick: onDepartmentsClick,
-      activeRing: isDeptFiltered ? 'ring-2 ring-purple-500 border-purple-300 bg-purple-50/30' : '',
-      actionHint: isDeptFiltered ? 'Filtered: 1 Dept active' : 'Click to view breakdown',
+      activeRing: isDeptFiltered ? 'ring-2 ring-purple-500 border-purple-300 bg-purple-50/30 shadow-sm' : '',
+      actionHint: isDeptFiltered ? 'Dept filter active • Click to view' : 'Click to view breakdown',
       actionColor: isDeptFiltered ? 'text-purple-700 font-semibold' : 'text-slate-400',
     },
     {

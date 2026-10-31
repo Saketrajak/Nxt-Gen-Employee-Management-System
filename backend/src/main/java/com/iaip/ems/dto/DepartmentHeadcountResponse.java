@@ -64,3 +64,4 @@ public class DepartmentHeadcountResponse {
         this.activeCount = activeCount;
     }
 }
+

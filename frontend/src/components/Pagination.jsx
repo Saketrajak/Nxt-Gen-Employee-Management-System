@@ -5,6 +5,7 @@ export default function Pagination({
   currentPage,
   pageSize,
   totalElements,
+  globalTotal,
   totalPages,
   onPageChange,
   onPageSizeChange,
@@ -20,6 +21,9 @@ export default function Pagination({
           Showing <strong className="text-slate-800">{startItem}</strong> to{' '}
           <strong className="text-slate-800">{endItem}</strong> of{' '}
           <strong className="text-slate-800">{totalElements}</strong> matching records
+          {globalTotal && globalTotal !== totalElements && (
+            <span className="text-slate-400"> (out of {globalTotal} registered)</span>
+          )}
         </span>
 
         <div className="flex items-center space-x-1.5">
@@ -56,8 +60,8 @@ export default function Pagination({
           <ChevronLeft className="w-4 h-4" />
         </button>
 
-        <span className="px-3 py-1 text-xs font-semibold text-slate-700 bg-slate-100 rounded border border-slate-200">
-          Page {currentPage} of {totalPages || 1}
+        <span className="px-3 py-1 text-xs font-medium text-slate-700">
+          Page {currentPage} of {Math.max(1, totalPages)}
         </span>
 
         <button

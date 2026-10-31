@@ -66,3 +66,4 @@ public class DashboardStatsResponse {
         this.departmentSummaries = departmentSummaries;
     }
 }
+
