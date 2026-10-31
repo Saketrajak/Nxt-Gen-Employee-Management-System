@@ -295,7 +295,7 @@ function Dashboard() {
   const canModify = hasRole(['ADMIN', 'MANAGER']);
 
   return (
-    <div className="min-h-screen bg-[#f7f9f7] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#f8faf9] flex flex-col font-sans text-slate-900">
       <Navbar onOpenLogin={() => setIsLoginOpen(true)} onOpenRegister={handleOpenCreate} />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -314,9 +314,9 @@ function Dashboard() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div>
             <div className="flex items-center space-x-2.5">
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight font-serif">Personnel Directory</h1>
-              <span className="bg-amber-100/80 text-amber-900 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-amber-300/80 tracking-wider">
-                SOUTHERN COMD CADRE
+              <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Personnel Directory</h1>
+              <span className="bg-amber-100/90 text-amber-900 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border border-amber-300 tracking-wider">
+                LIVE CADRE • HQ SOUTHERN COMMAND
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-1">
@@ -339,7 +339,7 @@ function Dashboard() {
             {canModify && (
               <button
                 onClick={handleOpenCreate}
-                className="flex items-center space-x-1.5 px-4 py-2 bg-[#1c2e21] hover:bg-[#273f2e] text-white text-xs font-semibold rounded-lg shadow-sm border border-[#2d4734] transition hover:shadow"
+                className="flex items-center space-x-1.5 px-4 py-2 bg-[#1c2e21] hover:bg-[#273f2e] text-white text-xs font-semibold rounded-lg shadow-sm border border-[#2d4734] transition hover:shadow-md active:scale-98"
               >
                 <UserPlus className="w-4 h-4 text-amber-400" />
                 <span>Register Personnel</span>
@@ -456,7 +456,7 @@ function Dashboard() {
         )}
 
         {/* Main Data Table */}
-        <div className="bg-white rounded-lg border border-slate-200 shadow-xs overflow-hidden mb-8">
+        <div className="bg-white rounded-xl border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] overflow-hidden mb-8">
           <EmployeeTable
             employees={employees}
             sortBy={sortBy}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, UserCheck, Building2, ArrowRightLeft, MousePointerClick } from 'lucide-react';
+import { Users, UserCheck, Building2, ArrowRightLeft, MousePointerClick, ShieldCheck, Activity, Layers, History } from 'lucide-react';
 
 export default function StatCards({
   totalRecords,
@@ -18,70 +18,77 @@ export default function StatCards({
   const isActiveFiltered = activeStatus === 'ACTIVE';
   const isDeptFiltered = Boolean(activeDepartmentId);
 
+  // Calculate percentage of active personnel
+  const activePercent = totalRecords > 0 ? Math.round((activeCount / totalRecords) * 100) : 0;
+
   const stats = [
     {
       id: 'total',
       title: 'Total Personnel',
-      subtitle: 'Strength on Roll',
+      code: 'STRENGTH',
       value: totalRecords,
       desc: 'Registered cadre in records',
+      badge: '100% REGIMENTAL CADRE',
+      badgeColor: 'bg-slate-100 text-slate-700 border-slate-300',
       icon: Users,
-      color: 'text-slate-800',
-      bgColor: 'bg-slate-100',
-      borderColor: 'border-slate-300',
-      borderAccent: 'border-l-4 border-l-slate-800',
+      iconColor: 'text-slate-700',
+      iconBg: 'bg-slate-100 border-slate-200',
+      topBorder: 'border-t-2 border-t-slate-700',
       onClick: onTotalClick,
-      activeRing: isTotalActive ? 'ring-2 ring-slate-700 border-slate-300 bg-slate-50/50 shadow-sm' : '',
+      activeRing: isTotalActive ? 'ring-2 ring-slate-800 shadow-sm' : '',
       actionHint: isTotalActive ? 'Viewing full cadre' : 'Click to show all personnel',
-      actionColor: isTotalActive ? 'text-slate-700 font-semibold' : 'text-slate-500 font-medium underline',
+      actionColor: isTotalActive ? 'text-slate-800 font-semibold' : 'text-slate-500 font-medium underline',
     },
     {
       id: 'active',
       title: 'Active Employees',
-      subtitle: 'On Active Duty',
+      code: 'DUTY STATUS',
       value: activeCount,
-      desc: 'Currently in regular service',
+      desc: `${activePercent}% operational readiness`,
+      badge: `${activePercent}% ON DUTY`,
+      badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-300',
       icon: UserCheck,
-      color: 'text-[#1e3e26]',
-      bgColor: 'bg-emerald-50',
-      borderColor: 'border-emerald-300',
-      borderAccent: 'border-l-4 border-l-[#244b2f]',
+      iconColor: 'text-[#1e3e26]',
+      iconBg: 'bg-emerald-50 border-emerald-200',
+      topBorder: 'border-t-2 border-t-[#244b2f]',
       onClick: onActiveClick,
-      activeRing: isActiveFiltered ? 'ring-2 ring-[#244b2f] border-emerald-400 bg-emerald-50/30 shadow-sm' : '',
+      activeRing: isActiveFiltered ? 'ring-2 ring-[#244b2f] shadow-sm' : '',
       actionHint: isActiveFiltered ? 'Active filter on • Click to clear' : 'Click to filter active duty',
       actionColor: isActiveFiltered ? 'text-[#1e3e26] font-semibold' : 'text-slate-400',
     },
     {
       id: 'departments',
       title: 'Departments',
-      subtitle: 'Formations & Corps',
+      code: 'CORPS & DIV',
       value: departmentCount || 5,
       desc: 'IT, HR, Fin, Sales, Admin',
+      badge: '5 CORPS FORMATIONS',
+      badgeColor: 'bg-amber-50 text-amber-900 border-amber-300',
       icon: Building2,
-      color: 'text-stone-800',
-      bgColor: 'bg-stone-100',
-      borderColor: 'border-stone-300',
-      borderAccent: 'border-l-4 border-l-stone-700',
+      iconColor: 'text-amber-800',
+      iconBg: 'bg-amber-50 border-amber-200',
+      topBorder: 'border-t-2 border-t-amber-600',
       onClick: onDepartmentsClick,
-      activeRing: isDeptFiltered ? 'ring-2 ring-stone-700 border-stone-400 bg-stone-50/40 shadow-sm' : '',
+      activeRing: isDeptFiltered ? 'ring-2 ring-amber-600 shadow-sm' : '',
       actionHint: isDeptFiltered ? 'Dept filter active • Click to view' : 'Click to manage departments',
-      actionColor: isDeptFiltered ? 'text-stone-800 font-semibold' : 'text-slate-400',
+      actionColor: isDeptFiltered ? 'text-amber-900 font-semibold' : 'text-slate-400',
     },
     {
       id: 'transfers',
       title: 'Department Transfers',
-      subtitle: 'Postings & Movements',
+      code: 'POSTINGS',
       value: transferCount,
-      desc: 'Verified service audit log',
+      desc: 'Audited cadre movement logs',
+      badge: 'VERIFIED AUDIT LOG',
+      badgeColor: 'bg-blue-50 text-blue-900 border-blue-300',
       icon: ArrowRightLeft,
-      color: 'text-amber-800',
-      bgColor: 'bg-amber-50',
-      borderColor: 'border-amber-300',
-      borderAccent: 'border-l-4 border-l-amber-700',
+      iconColor: 'text-blue-800',
+      iconBg: 'bg-blue-50 border-blue-200',
+      topBorder: 'border-t-2 border-t-blue-700',
       onClick: onTransfersClick,
       activeRing: '',
       actionHint: 'Click to view postings audit',
-      actionColor: 'text-amber-800 hover:underline font-medium',
+      actionColor: 'text-blue-800 hover:underline font-medium',
     },
   ];
 
@@ -94,23 +101,40 @@ export default function StatCards({
             key={stat.id}
             type="button"
             onClick={stat.onClick}
-            className={`w-full text-left bg-white rounded-lg p-5 border border-slate-200 shadow-xs flex items-center justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 cursor-pointer group ${stat.borderAccent} ${stat.activeRing}`}
+            className={`w-full text-left bg-white rounded-xl p-5 border border-slate-200/90 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:border-slate-300 cursor-pointer group ${stat.topBorder} ${stat.activeRing}`}
           >
-            <div>
-              <div className="flex items-center space-x-1.5">
-                <p className="text-[11px] font-bold text-slate-600 uppercase tracking-wider group-hover:text-slate-900 transition">
+            {/* Top row: Label + Badge + Icon */}
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
+                  {stat.code}
+                </span>
+                <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mt-0.5 group-hover:text-slate-900 transition">
                   {stat.title}
                 </p>
               </div>
-              <h3 className="text-2xl font-extrabold text-slate-900 mt-1 font-mono tracking-tight">{stat.value}</h3>
-              <p className="text-[11px] text-slate-500 mt-0.5">{stat.desc}</p>
-              <div className="flex items-center space-x-1 mt-2.5 text-[11px]">
+              <div className={`p-2 rounded-lg ${stat.iconBg} border ${stat.iconColor} shadow-2xs group-hover:scale-105 transition-transform`}>
+                <Icon className="w-4 h-4" />
+              </div>
+            </div>
+
+            {/* Middle: Big Metric Value + Badge */}
+            <div className="mt-4 flex items-baseline justify-between">
+              <span className="text-3xl font-extrabold text-slate-900 font-mono tracking-tight">
+                {stat.value}
+              </span>
+              <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${stat.badgeColor}`}>
+                {stat.badge}
+              </span>
+            </div>
+
+            {/* Bottom: Description + Click Trigger */}
+            <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span className="text-slate-400 font-medium truncate max-w-[150px]">{stat.desc}</span>
+              <div className="flex items-center space-x-1 flex-shrink-0">
                 <MousePointerClick className="w-3 h-3 text-slate-400 group-hover:text-slate-600" />
                 <span className={stat.actionColor}>{stat.actionHint}</span>
               </div>
-            </div>
-            <div className={`p-3 rounded-lg ${stat.bgColor} ${stat.borderColor} border group-hover:scale-105 transition-transform flex-shrink-0 shadow-xs`}>
-              <Icon className={`w-5 h-5 ${stat.color}`} />
             </div>
           </button>
         );
