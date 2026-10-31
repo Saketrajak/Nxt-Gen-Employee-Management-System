@@ -73,7 +73,7 @@ function Dashboard() {
   });
 
   // Fetch Lookups (Departments, Roles)
-  useEffect(() => {
+  const refreshDepartments = useCallback(() => {
     client.get('/api/lookup/departments')
       .then((res) => {
         setDepartments(res.data);
@@ -83,11 +83,15 @@ function Dashboard() {
         }));
       })
       .catch((err) => console.error('Failed to load departments', err));
+  }, []);
+
+  useEffect(() => {
+    refreshDepartments();
 
     client.get('/api/lookup/roles')
       .then((res) => setRoles(res.data))
       .catch((err) => console.error('Failed to load roles', err));
-  }, []);
+  }, [refreshDepartments]);
 
   // Fetch Global Organization Stats
   const fetchGlobalStats = useCallback(async () => {
@@ -519,6 +523,11 @@ function Dashboard() {
         selectedDepartmentId={filters.departmentId}
         onSelectDepartment={(deptId) => handleFilterChange({ departmentId: deptId })}
         onClearDepartment={() => handleFilterChange({ departmentId: '' })}
+        onDepartmentsUpdated={() => {
+          refreshDepartments();
+          fetchEmployees();
+          fetchGlobalStats();
+        }}
       />
 
       <TransferAuditModal

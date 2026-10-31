@@ -54,6 +54,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.CONFLICT, primaryMessage, fieldErrors);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
+    }
+
     @ExceptionHandler(InvalidTransferException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidTransfer(InvalidTransferException ex) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), null);
@@ -61,7 +66,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
-        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Invalid username or password", null);
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage() != null ? ex.getMessage() : "Invalid username or password", null);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

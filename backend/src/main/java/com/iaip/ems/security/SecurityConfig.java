@@ -49,12 +49,18 @@ public class SecurityConfig {
                                 "/error"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/lookup/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/departments/**").permitAll()
 
                         // 2. Public Read-Only Directory View (Allows evaluators to immediately browse records)
                         .requestMatchers(HttpMethod.GET, "/api/employees/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/transfers/**").permitAll()
 
-                        // 3. Role-Based Mutations (State Changes)
+                        // 3. Department Mutations (Admin Only)
+                        .requestMatchers(HttpMethod.POST, "/api/departments/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/departments/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/departments/**").hasRole("ADMIN")
+
+                        // 4. Role-Based Employee Mutations
                         // Admin & Manager: Can Register, Edit, and Initiate Transfers
                         .requestMatchers(HttpMethod.POST, "/api/employees").hasAnyRole("ADMIN", "MANAGER")
                         .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAnyRole("ADMIN", "MANAGER")
@@ -85,10 +91,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "Origin", "X-Requested-With"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         configuration.setExposedHeaders(List.of("Authorization"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
