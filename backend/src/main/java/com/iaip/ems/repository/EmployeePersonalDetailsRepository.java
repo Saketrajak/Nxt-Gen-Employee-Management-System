@@ -15,4 +15,14 @@ public interface EmployeePersonalDetailsRepository extends JpaRepository<Employe
 
     @Query("SELECT COUNT(p) > 0 FROM EmployeePersonalDetails p WHERE p.email = :email AND p.employee.id <> :empId")
     boolean existsByEmailAndDifferentEmployee(@Param("email") String email, @Param("empId") Long empId);
+
+    boolean existsByAadhaarNumber(String aadhaarNumber);
+
+    @Query("SELECT COUNT(p) > 0 FROM EmployeePersonalDetails p WHERE p.aadhaarNumber = :aadhaarNumber AND p.employee.id <> :empId")
+    boolean existsByAadhaarNumberAndDifferentEmployee(@Param("aadhaarNumber") String aadhaarNumber, @Param("empId") Long empId);
+
+    boolean existsByPanNumberIgnoreCase(String panNumber);
+
+    @Query("SELECT COUNT(p) > 0 FROM EmployeePersonalDetails p WHERE UPPER(p.panNumber) = UPPER(:panNumber) AND p.employee.id <> :empId")
+    boolean existsByPanNumberAndDifferentEmployee(@Param("panNumber") String panNumber, @Param("empId") Long empId);
 }

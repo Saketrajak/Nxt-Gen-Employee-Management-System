@@ -53,8 +53,18 @@ public class EmployeeService {
      */
     @Transactional(rollbackFor = Exception.class)
     public EmployeeDetailResponse createEmployee(EmployeeCreateRequest request) {
-        if (personalDetailsRepository.existsByEmail(request.getEmail())) {
-            throw new DuplicateResourceException("An employee with email " + request.getEmail() + " already exists.");
+        String normalizedEmail = request.getEmail().trim().toLowerCase();
+        String normalizedAadhaar = normalizeAadhaar(request.getAadhaarNumber());
+        String normalizedPan = normalizePan(request.getPanNumber());
+
+        if (personalDetailsRepository.existsByEmail(normalizedEmail)) {
+            throw new DuplicateResourceException("email", "An employee with email " + normalizedEmail + " already exists.");
+        }
+        if (personalDetailsRepository.existsByAadhaarNumber(normalizedAadhaar)) {
+            throw new DuplicateResourceException("aadhaarNumber", "An employee with Aadhaar number " + normalizedAadhaar + " already exists.");
+        }
+        if (personalDetailsRepository.existsByPanNumberIgnoreCase(normalizedPan)) {
+            throw new DuplicateResourceException("panNumber", "An employee with PAN number " + normalizedPan + " already exists.");
         }
 
         Department department = departmentRepository.findById(request.getDepartmentId())
@@ -76,10 +86,10 @@ public class EmployeeService {
 
         EmployeePersonalDetails personal = new EmployeePersonalDetails();
         personal.setFullName(request.getFullName().trim());
-        personal.setEmail(request.getEmail().trim().toLowerCase());
+        personal.setEmail(normalizedEmail);
         personal.setMobile(request.getMobile().trim());
-        personal.setAadhaarNumber(request.getAadhaarNumber().trim());
-        personal.setPanNumber(request.getPanNumber().trim().toUpperCase());
+        personal.setAadhaarNumber(normalizedAadhaar);
+        personal.setPanNumber(normalizedPan);
         personal.setDateOfBirth(request.getDateOfBirth());
         personal.setGender(request.getGender().trim());
         personal.setAddress(request.getAddress().trim());
@@ -208,8 +218,18 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
 
-        if (personalDetailsRepository.existsByEmailAndDifferentEmployee(request.getEmail(), id)) {
-            throw new DuplicateResourceException("Another employee already uses email " + request.getEmail());
+        String normalizedEmail = request.getEmail().trim().toLowerCase();
+        String normalizedAadhaar = normalizeAadhaar(request.getAadhaarNumber());
+        String normalizedPan = normalizePan(request.getPanNumber());
+
+        if (personalDetailsRepository.existsByEmailAndDifferentEmployee(normalizedEmail, id)) {
+            throw new DuplicateResourceException("email", "Another employee already uses email " + normalizedEmail);
+        }
+        if (personalDetailsRepository.existsByAadhaarNumberAndDifferentEmployee(normalizedAadhaar, id)) {
+            throw new DuplicateResourceException("aadhaarNumber", "Another employee already uses Aadhaar number " + normalizedAadhaar);
+        }
+        if (personalDetailsRepository.existsByPanNumberAndDifferentEmployee(normalizedPan, id)) {
+            throw new DuplicateResourceException("panNumber", "Another employee already uses PAN number " + normalizedPan);
         }
 
         Role role = roleRepository.findById(request.getRoleId())
@@ -227,10 +247,10 @@ public class EmployeeService {
         }
 
         personal.setFullName(request.getFullName().trim());
-        personal.setEmail(request.getEmail().trim().toLowerCase());
+        personal.setEmail(normalizedEmail);
         personal.setMobile(request.getMobile().trim());
-        personal.setAadhaarNumber(request.getAadhaarNumber().trim());
-        personal.setPanNumber(request.getPanNumber().trim().toUpperCase());
+        personal.setAadhaarNumber(normalizedAadhaar);
+        personal.setPanNumber(normalizedPan);
         personal.setDateOfBirth(request.getDateOfBirth());
         personal.setGender(request.getGender().trim());
         personal.setAddress(request.getAddress().trim());
@@ -253,6 +273,20 @@ public class EmployeeService {
             throw new ResourceNotFoundException("Employee not found with ID: " + id);
         }
         employeeRepository.deleteById(id);
+    }
+
+    public String normalizeAadhaar(String raw) {
+        if (raw == null) return null;
+        String digits = raw.replaceAll("\\D", "");
+        if (digits.length() == 12) {
+            return digits.substring(0, 4) + "-" + digits.substring(4, 8) + "-" + digits.substring(8, 12);
+        }
+        return raw.trim();
+    }
+
+    public String normalizePan(String raw) {
+        if (raw == null) return null;
+        return raw.trim().toUpperCase();
     }
 
     private Sort resolveSort(String sortBy, Sort.Direction direction) {

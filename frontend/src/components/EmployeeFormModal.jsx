@@ -31,6 +31,7 @@ export default function EmployeeFormModal({
 
   const [formData, setFormData] = useState(initialForm);
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(false);
   const [previewCode, setPreviewCode] = useState('');
@@ -68,13 +69,14 @@ export default function EmployeeFormModal({
           });
         })
         .catch((err) => {
-          alert('Failed to load employee details: ' + (err.response?.data?.message || err.message));
+          setServerError('Failed to load employee details: ' + (err.response?.data?.message || err.message));
         })
         .finally(() => setLoadingInitial(false));
     } else {
       setFormData(initialForm);
     }
     setErrors({});
+    setServerError('');
   }, [isOpen, employeeId]);
 
   if (!isOpen) return null;
@@ -149,6 +151,7 @@ export default function EmployeeFormModal({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setServerError('');
     if (!validate()) return;
 
     setSubmitting(true);
@@ -163,12 +166,13 @@ export default function EmployeeFormModal({
     } catch (err) {
       const serverMsg = err.response?.data?.message;
       const validationErrs = err.response?.data?.validationErrors;
-      if (validationErrs) {
+      if (validationErrs && Object.keys(validationErrs).length > 0) {
         setErrors(validationErrs);
+        setServerError(serverMsg || 'Please correct the highlighted duplicate or invalid entries below.');
       } else if (serverMsg) {
-        alert('Operation failed: ' + serverMsg);
+        setServerError(serverMsg);
       } else {
-        alert('Error saving employee: ' + err.message);
+        setServerError('Error saving employee: ' + err.message);
       }
     } finally {
       setSubmitting(false);
@@ -178,10 +182,26 @@ export default function EmployeeFormModal({
   const handleAadhaarChange = (e) => {
     const formatted = formatAadhaarInput(e.target.value);
     setFormData({ ...formData, aadhaarNumber: formatted });
+    if (errors.aadhaarNumber) {
+      setErrors((prev) => ({ ...prev, aadhaarNumber: undefined }));
+    }
+    if (serverError) setServerError('');
   };
 
   const handlePanChange = (e) => {
     setFormData({ ...formData, panNumber: e.target.value.toUpperCase().slice(0, 10) });
+    if (errors.panNumber) {
+      setErrors((prev) => ({ ...prev, panNumber: undefined }));
+    }
+    if (serverError) setServerError('');
+  };
+
+  const handleEmailChange = (e) => {
+    setFormData({ ...formData, email: e.target.value });
+    if (errors.email) {
+      setErrors((prev) => ({ ...prev, email: undefined }));
+    }
+    if (serverError) setServerError('');
   };
 
   return (
@@ -213,6 +233,14 @@ export default function EmployeeFormModal({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+            {/* Server Error / Duplicate Warning Banner */}
+            {serverError && (
+              <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 flex items-start space-x-2 text-xs text-rose-800">
+                <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+                <span className="font-medium">{serverError}</span>
+              </div>
+            )}
+
             {/* Auto Code Generation Notice (Create mode) */}
             {!isEdit && (
               <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center justify-between text-xs text-emerald-900">
@@ -242,7 +270,7 @@ export default function EmployeeFormModal({
                     disabled={isEdit}
                     value={formData.departmentId}
                     onChange={(e) => setFormData({ ...formData, departmentId: Number(e.target.value) })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 disabled:opacity-60"
+                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {departments.map((d) => (
                       <option key={d.id} value={d.id}>
@@ -254,7 +282,7 @@ export default function EmployeeFormModal({
 
                 {/* Role */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Role / Designation *</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Designation / Role *</label>
                   <select
                     value={formData.roleId}
                     onChange={(e) => setFormData({ ...formData, roleId: Number(e.target.value) })}
@@ -329,13 +357,15 @@ export default function EmployeeFormModal({
 
                 {/* Email Address */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Email Address *</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Email Address (Unique) *</label>
                   <input
                     type="email"
                     placeholder="e.g. vikram.rathore@iaip.gov.in"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500"
+                    onChange={handleEmailChange}
+                    className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:ring-2 focus:ring-emerald-500 ${
+                      errors.email ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
+                    }`}
                   />
                   {errors.email && <p className="text-[11px] text-rose-500 mt-0.5">{errors.email}</p>}
                 </div>
@@ -357,7 +387,7 @@ export default function EmployeeFormModal({
                 {/* Aadhaar Number with Auto-Formatting */}
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Aadhaar Number (Auto-hyphenated) *
+                    Aadhaar Number (Unique, Auto-hyphenated) *
                   </label>
                   <input
                     type="text"
@@ -365,21 +395,27 @@ export default function EmployeeFormModal({
                     placeholder="XXXX-XXXX-XXXX"
                     value={formData.aadhaarNumber}
                     onChange={handleAadhaarChange}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 font-mono tracking-wider"
+                    className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:ring-2 focus:ring-emerald-500 font-mono tracking-wider ${
+                      errors.aadhaarNumber ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
+                    }`}
                   />
                   {errors.aadhaarNumber && <p className="text-[11px] text-rose-500 mt-0.5">{errors.aadhaarNumber}</p>}
                 </div>
 
                 {/* PAN Number */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">PAN Card Number (ABCDE1234F) *</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    PAN Card Number (Unique, ABCDE1234F) *
+                  </label>
                   <input
                     type="text"
                     maxLength={10}
                     placeholder="ABCDE1234F"
                     value={formData.panNumber}
                     onChange={handlePanChange}
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500 font-mono uppercase"
+                    className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:ring-2 focus:ring-emerald-500 font-mono uppercase ${
+                      errors.panNumber ? 'border-rose-400 bg-rose-50/30' : 'border-slate-200'
+                    }`}
                   />
                   {errors.panNumber && <p className="text-[11px] text-rose-500 mt-0.5">{errors.panNumber}</p>}
                 </div>

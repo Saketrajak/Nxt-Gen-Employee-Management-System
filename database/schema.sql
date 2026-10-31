@@ -58,8 +58,8 @@ CREATE TABLE employee_personal_details (
     full_name VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     mobile VARCHAR(15) NOT NULL,
-    aadhaar_number VARCHAR(20) NOT NULL,
-    pan_number VARCHAR(10) NOT NULL,
+    aadhaar_number VARCHAR(20) NOT NULL UNIQUE,
+    pan_number VARCHAR(10) NOT NULL UNIQUE,
     date_of_birth DATE NOT NULL,
     gender VARCHAR(20) NOT NULL CHECK (gender IN ('Male', 'Female', 'Other')),
     address TEXT NOT NULL,
@@ -103,4 +103,6 @@ CREATE INDEX idx_employees_joining ON employees(joining_date);
 CREATE INDEX idx_personal_details_name ON employee_personal_details(full_name);
 CREATE INDEX idx_personal_details_email ON employee_personal_details(email);
 CREATE INDEX idx_personal_details_mobile ON employee_personal_details(mobile);
+CREATE INDEX idx_personal_details_aadhaar ON employee_personal_details(aadhaar_number);
+CREATE INDEX idx_personal_details_pan ON employee_personal_details(pan_number);
 CREATE INDEX idx_transfer_history_emp ON employee_transfer_history(employee_id);

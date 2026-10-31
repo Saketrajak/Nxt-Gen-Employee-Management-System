@@ -92,9 +92,9 @@ INSERT INTO employees (id, employee_code, department_id, role_id, status, joinin
 
 INSERT INTO employee_personal_details (employee_id, full_name, email, mobile, aadhaar_number, pan_number, date_of_birth, gender, address) VALUES
 (19, 'Baldev Singh Gill', 'baldev.singh@iaip.gov.in', '8577889900', '3456-7890-1234', 'STUVW3456H', '1986-08-19', 'Male', 'Army Welfare Housing, Salunke Vihar, Kondhwa, Pune'),
-(20, 'Meenakshi Iyer', 'meenakshi.iyer@iaip.gov.in', '8488990011', '8901-2345-6789', 'TUVWX7890I', '1992-11-04', 'Female', 'Apt 12, Gulmohar Habitat, Salunke Vihar Road, Pune'),
-(21, 'Tariq Ahmed Khan', 'tariq.khan@iaip.gov.in', '8399001122', '4567-8901-2345', 'UVWXY1234J', '1998-02-14', 'Male', 'Flat 103, Royal Palms, Fatima Nagar, Pune, Maharashtra'),
-(22, 'Shweta Rane', 'shweta.rane@iaip.gov.in', '8200112233', '9012-3456-7890', 'VWXYZ5678K', '2001-09-18', 'Female', '67, Sahakar Nagar No. 2, Pune, Maharashtra');
+(20, 'Meenakshi Iyer', 'meenakshi.iyer@iaip.gov.in', '8488990011', '8901-2345-6701', 'TUVWX7890I', '1992-11-04', 'Female', 'Apt 12, Gulmohar Habitat, Salunke Vihar Road, Pune'),
+(21, 'Tariq Ahmed Khan', 'tariq.khan@iaip.gov.in', '8399001122', '4567-8901-2302', 'UVWXY1234J', '1998-02-14', 'Male', 'Flat 103, Royal Palms, Fatima Nagar, Pune, Maharashtra'),
+(22, 'Shweta Rane', 'shweta.rane@iaip.gov.in', '8200112233', '9012-3456-7803', 'VWXYZ5678K', '2001-09-18', 'Female', '67, Sahakar Nagar No. 2, Pune, Maharashtra');
 
 SELECT setval('employees_id_seq', 22, true);
 SELECT setval('employee_personal_details_id_seq', 22, true);

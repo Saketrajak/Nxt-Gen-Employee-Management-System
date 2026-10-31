@@ -27,10 +27,10 @@ public class EmployeePersonalDetails {
     @Column(nullable = false, length = 15)
     private String mobile;
 
-    @Column(name = "aadhaar_number", nullable = false, length = 20)
+    @Column(name = "aadhaar_number", nullable = false, unique = true, length = 20)
     private String aadhaarNumber;
 
-    @Column(name = "pan_number", nullable = false, length = 10)
+    @Column(name = "pan_number", nullable = false, unique = true, length = 10)
     private String panNumber;
 
     @Column(name = "date_of_birth", nullable = false)

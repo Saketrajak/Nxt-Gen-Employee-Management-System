@@ -1,5 +1,6 @@
 package com.iaip.ems.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,7 +24,34 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<Map<String, Object>> handleDuplicate(DuplicateResourceException ex) {
-        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), null);
+        Map<String, String> fieldErrors = null;
+        if (ex.getField() != null && !ex.getField().isBlank()) {
+            fieldErrors = new HashMap<>();
+            fieldErrors.put(ex.getField(), ex.getMessage());
+        }
+        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), fieldErrors);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
+        String cause = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        Map<String, String> fieldErrors = new HashMap<>();
+        String primaryMessage = "Data integrity violation: duplicate value detected.";
+
+        if (cause != null) {
+            String lower = cause.toLowerCase();
+            if (lower.contains("uq_personal_aadhaar") || lower.contains("aadhaar_number")) {
+                primaryMessage = "Aadhaar number is already registered to another employee.";
+                fieldErrors.put("aadhaarNumber", primaryMessage);
+            } else if (lower.contains("uq_personal_pan") || lower.contains("pan_number")) {
+                primaryMessage = "PAN card number is already registered to another employee.";
+                fieldErrors.put("panNumber", primaryMessage);
+            } else if (lower.contains("email")) {
+                primaryMessage = "Email address is already registered to another employee.";
+                fieldErrors.put("email", primaryMessage);
+            }
+        }
+        return buildErrorResponse(HttpStatus.CONFLICT, primaryMessage, fieldErrors);
     }
 
     @ExceptionHandler(InvalidTransferException.class)
