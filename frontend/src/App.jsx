@@ -354,6 +354,8 @@ function Dashboard() {
           activeCount={globalStats.active}
           departmentCount={globalStats.departments}
           transferCount={globalStats.transfers}
+          departmentSummaries={globalStats.departmentSummaries}
+          departments={departments}
           activeStatus={filters.status}
           activeDepartmentId={filters.departmentId}
           hasActiveFilters={hasActiveFilters}
