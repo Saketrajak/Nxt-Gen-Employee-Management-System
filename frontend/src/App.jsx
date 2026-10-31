@@ -486,12 +486,12 @@ function Dashboard() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#131d16] border-t border-[#253629] py-4 text-center text-xs text-slate-400">
+      <footer className="bg-[#0b1118] border-t border-slate-800/80 py-4 text-center text-xs text-slate-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center space-x-2">
-            <span className="text-amber-400 font-semibold">IAIP 2026</span>
-            <span className="text-slate-500">•</span>
-            <span>HQ Southern Command, Indian Army</span>
+            <span className="text-amber-400 font-semibold font-mono">IAIP 2026</span>
+            <span className="text-slate-600">•</span>
+            <span className="text-slate-300">HQ Southern Command, Indian Army</span>
           </div>
           <p className="text-slate-400">Process Automation & Application Development Directorate</p>
         </div>
