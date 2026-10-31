@@ -101,7 +101,7 @@ public class TransferService {
 
     @Transactional(readOnly = true)
     public List<TransferHistoryResponse> getAllTransferHistory() {
-        return transferHistoryRepository.findAll()
+        return transferHistoryRepository.findAllByOrderByTransferDateDescCreatedAtDesc()
                 .stream()
                 .map(this::mapToHistoryResponse)
                 .collect(Collectors.toList());
@@ -111,6 +111,9 @@ public class TransferService {
         TransferHistoryResponse res = new TransferHistoryResponse();
         res.setId(h.getId());
         res.setEmployeeId(h.getEmployee().getId());
+        if (h.getEmployee().getPersonalDetails() != null) {
+            res.setEmployeeName(h.getEmployee().getPersonalDetails().getFullName());
+        }
         res.setOldDepartmentId(h.getOldDepartment().getId());
         res.setOldDepartmentName(h.getOldDepartment().getName());
         res.setNewDepartmentId(h.getNewDepartment().getId());

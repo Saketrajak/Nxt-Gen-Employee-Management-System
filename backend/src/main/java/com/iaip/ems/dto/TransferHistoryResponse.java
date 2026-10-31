@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 public class TransferHistoryResponse {
     private Long id;
     private Long employeeId;
+    private String employeeName;
     private Integer oldDepartmentId;
     private String oldDepartmentName;
     private Integer newDepartmentId;
@@ -25,6 +26,9 @@ public class TransferHistoryResponse {
 
     public Long getEmployeeId() { return employeeId; }
     public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
+
+    public String getEmployeeName() { return employeeName; }
+    public void setEmployeeName(String employeeName) { this.employeeName = employeeName; }
 
     public Integer getOldDepartmentId() { return oldDepartmentId; }
     public void setOldDepartmentId(Integer oldDepartmentId) { this.oldDepartmentId = oldDepartmentId; }

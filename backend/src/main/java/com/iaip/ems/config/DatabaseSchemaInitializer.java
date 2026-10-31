@@ -62,3 +62,4 @@ public class DatabaseSchemaInitializer implements CommandLineRunner {
         }
     }
 }
+

@@ -41,7 +41,6 @@ public class TransferController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     @Operation(summary = "Get all department transfer audit records across the organization")
     public ResponseEntity<List<TransferHistoryResponse>> getAllTransfers() {
         List<TransferHistoryResponse> history = transferService.getAllTransferHistory();

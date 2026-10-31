@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface EmployeeTransferHistoryRepository extends JpaRepository<EmployeeTransferHistory, Long> {
     List<EmployeeTransferHistory> findByEmployeeIdOrderByTransferDateDescCreatedAtDesc(Long employeeId);
+    List<EmployeeTransferHistory> findAllByOrderByTransferDateDescCreatedAtDesc();
 }

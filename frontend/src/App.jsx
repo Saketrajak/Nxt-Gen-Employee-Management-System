@@ -8,6 +8,8 @@ import EmployeeFormModal from './components/EmployeeFormModal';
 import TransferModal from './components/TransferModal';
 import EmployeeDetailModal from './components/EmployeeDetailModal';
 import LoginModal from './components/LoginModal';
+import DepartmentOverviewModal from './components/DepartmentOverviewModal';
+import TransferAuditModal from './components/TransferAuditModal';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { UserPlus, Download, RefreshCw, AlertCircle } from 'lucide-react';
 import client from './api/client';
@@ -57,9 +59,18 @@ function Dashboard() {
 
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
-  // Global counts for stats
-  const [activeCount, setActiveCount] = useState(0);
-  const [transferCount, setTransferCount] = useState(0);
+  // New Data Modals for Stat Card Clicks
+  const [isDeptOverviewOpen, setIsDeptOverviewOpen] = useState(false);
+  const [isTransferAuditOpen, setIsTransferAuditOpen] = useState(false);
+
+  // Global counts & summaries from API
+  const [statsData, setStatsData] = useState({
+    totalEmployees: 0,
+    activeEmployees: 0,
+    departmentCount: 5,
+    transferCount: 0,
+    departmentSummaries: [],
+  });
 
   // Fetch Lookups (Departments, Roles)
   useEffect(() => {
@@ -71,6 +82,25 @@ function Dashboard() {
       .then((res) => setRoles(res.data))
       .catch((err) => console.error('Failed to load roles', err));
   }, []);
+
+  // Fetch Organization Stats
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await client.get('/api/lookup/stats');
+      setStatsData(res.data);
+    } catch (err) {
+      // Fallback: fetch transfers count directly
+      client.get('/api/transfers')
+        .then((tRes) => {
+          setStatsData((prev) => ({ ...prev, transferCount: tRes.data.length }));
+        })
+        .catch(() => {});
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   // Fetch Employees List with Search, Filters, Sort & Pagination
   const fetchEmployees = useCallback(async () => {
@@ -97,10 +127,6 @@ function Dashboard() {
       setEmployees(res.data.content);
       setTotalElements(res.data.totalElements);
       setTotalPages(res.data.totalPages);
-
-      // Simple stats estimate
-      const active = res.data.content.filter((e) => e.status === 'ACTIVE').length;
-      setActiveCount(active);
     } catch (err) {
       console.error('API Error:', err);
       setApiError(
@@ -119,13 +145,6 @@ function Dashboard() {
     }, 250);
     return () => clearTimeout(timer);
   }, [fetchEmployees]);
-
-  // Fetch Transfer count for stats
-  useEffect(() => {
-    client.get('/api/transfers')
-      .then((res) => setTransferCount(res.data.length))
-      .catch(() => {});
-  }, []);
 
   const handleFilterChange = (updated) => {
     setFilters((prev) => ({ ...prev, ...updated }));
@@ -157,6 +176,28 @@ function Dashboard() {
     setCurrentPage(1);
   };
 
+  // Stat Card Click Handlers
+  const handleStatTotalClick = () => {
+    handleResetFilters();
+  };
+
+  const handleStatActiveClick = () => {
+    if (filters.status === 'ACTIVE') {
+      // Toggle off if already active
+      handleFilterChange({ status: '' });
+    } else {
+      handleFilterChange({ status: 'ACTIVE' });
+    }
+  };
+
+  const handleStatDepartmentsClick = () => {
+    setIsDeptOverviewOpen(true);
+  };
+
+  const handleStatTransfersClick = () => {
+    setIsTransferAuditOpen(true);
+  };
+
   // Actions
   const handleOpenCreate = () => {
     setEditingEmployeeId(null);
@@ -183,6 +224,7 @@ function Dashboard() {
       try {
         await client.patch(`/api/employees/${id}/deactivate`);
         fetchEmployees();
+        fetchStats();
       } catch (err) {
         alert('Deactivation failed: ' + (err.response?.data?.message || err.message));
       }
@@ -194,6 +236,7 @@ function Dashboard() {
       try {
         await client.delete(`/api/employees/${id}`);
         fetchEmployees();
+        fetchStats();
       } catch (err) {
         alert('Delete operation failed: ' + (err.response?.data?.message || err.message));
       }
@@ -229,7 +272,10 @@ function Dashboard() {
 
           <div className="flex items-center space-x-2.5">
             <button
-              onClick={() => fetchEmployees()}
+              onClick={() => {
+                fetchEmployees();
+                fetchStats();
+              }}
               className="p-2 text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg shadow-sm transition"
               title="Refresh Records"
             >
@@ -248,12 +294,18 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Metric Cards */}
+        {/* Interactive Metric Cards */}
         <StatCards
-          totalRecords={totalElements}
-          activeCount={activeCount}
-          departmentCount={departments.length}
-          transferCount={transferCount}
+          totalRecords={statsData.totalEmployees || totalElements}
+          activeCount={statsData.activeEmployees || 0}
+          departmentCount={statsData.departmentCount || departments.length}
+          transferCount={statsData.transferCount || 0}
+          activeStatus={filters.status}
+          activeDepartmentId={filters.departmentId}
+          onTotalClick={handleStatTotalClick}
+          onActiveClick={handleStatActiveClick}
+          onDepartmentsClick={handleStatDepartmentsClick}
+          onTransfersClick={handleStatTransfersClick}
         />
 
         {/* Search & Advanced Filters */}
@@ -308,6 +360,7 @@ function Dashboard() {
         roles={roles}
         onSuccess={() => {
           fetchEmployees();
+          fetchStats();
         }}
       />
 
@@ -318,7 +371,7 @@ function Dashboard() {
         departments={departments}
         onSuccess={() => {
           fetchEmployees();
-          setTransferCount((prev) => prev + 1);
+          fetchStats();
         }}
       />
 
@@ -326,6 +379,22 @@ function Dashboard() {
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
         employeeId={selectedDetailEmployeeId}
+      />
+
+      <DepartmentOverviewModal
+        isOpen={isDeptOverviewOpen}
+        onClose={() => setIsDeptOverviewOpen(false)}
+        departments={departments}
+        departmentSummaries={statsData.departmentSummaries}
+        selectedDepartmentId={filters.departmentId}
+        onSelectDepartment={(deptId) => handleFilterChange({ departmentId: deptId })}
+        onClearDepartment={() => handleFilterChange({ departmentId: '' })}
+      />
+
+      <TransferAuditModal
+        isOpen={isTransferAuditOpen}
+        onClose={() => setIsTransferAuditOpen(false)}
+        onFilterEmployee={(query) => handleFilterChange({ search: query, departmentId: '', status: '' })}
       />
 
       <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />

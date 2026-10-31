@@ -1,5 +1,6 @@
 package com.iaip.ems.controller;
 
+import com.iaip.ems.dto.DashboardStatsResponse;
 import com.iaip.ems.dto.DepartmentResponse;
 import com.iaip.ems.dto.RoleResponse;
 import com.iaip.ems.service.LookupService;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lookup")
-@Tag(name = "Lookup Data", description = "Endpoints for retrieving static reference data (Departments, Roles, Code Previews)")
+@Tag(name = "Lookup Data", description = "Endpoints for retrieving static reference data (Departments, Roles, Code Previews, Statistics)")
 public class LookupController {
 
     private final LookupService lookupService;
@@ -39,5 +40,11 @@ public class LookupController {
     public ResponseEntity<Map<String, String>> previewNextCode(@PathVariable Integer departmentId) {
         String nextCode = lookupService.previewNextCode(departmentId);
         return ResponseEntity.ok(Map.of("nextEmployeeCode", nextCode));
+    }
+
+    @GetMapping("/stats")
+    @Operation(summary = "Get organization summary statistics and department headcounts")
+    public ResponseEntity<DashboardStatsResponse> getStats() {
+        return ResponseEntity.ok(lookupService.getDashboardStats());
     }
 }
