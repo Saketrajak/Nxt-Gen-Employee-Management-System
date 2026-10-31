@@ -19,3 +19,4 @@ public class DepartmentDeleteRequest {
         this.adminPassword = adminPassword;
     }
 }
+

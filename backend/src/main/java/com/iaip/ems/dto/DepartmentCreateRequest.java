@@ -49,3 +49,4 @@ public class DepartmentCreateRequest {
         this.description = description;
     }
 }
+
